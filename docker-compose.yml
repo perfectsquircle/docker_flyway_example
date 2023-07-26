@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: example_user
+      POSTGRES_PASSWORD: example_password
+      POSTGRES_DB: example_database
+  migrations:
+    build: .
+    volumes:
+      - ./sql:/flyway/sql
+      - ./conf:/flyway/conf
+    depends_on:
+      - db
+    entrypoint: wait-for-it -t 60 db:5432 -- flyway migrate -configFiles=conf/local.conf
