@@ -14,8 +14,12 @@ services:
     image: redgate/flyway
     volumes:
       - ./sql:/flyway/sql
-      - ./conf:/flyway/conf
+    environment:
+      - FLYWAY_URL=jdbc:postgresql://db:5432/example_database
+      - FLYWAY_USER=example_user
+      - FLYWAY_PASSWORD=example_password
+      - FLYWAY_VALIDATE_MIGRATION_NAMING=true
+    command: migrate
     depends_on:
       - wait
-    command: migrate -configFiles=conf/local.conf
 
